@@ -77,6 +77,15 @@
               </span>
               <template v-else>{{text}}</template>
             </template>
+            <template slot="tags" slot-scope="workshop">
+              <a-tag
+                v-for="tag in workshop"
+                :color="'green'"
+                :key="tag"
+              >
+                {{tag}}
+              </a-tag>
+            </template>
             <template slot="actions" slot-scope="text, record">
               <a-button type="primary" shape="circle" icon="printer" @click="details(record)"></a-button>
             </template>
@@ -198,10 +207,15 @@ export default {
           sortOrder: sortedInfo.columnKey === "email" && sortedInfo.order
         },
         {
+          title: "Atelier",
+          dataIndex: "workshop",
+          scopedSlots: { customRender: "tags" }
+        },
+        {
           title: "Actions",
           dataIndex: "key",
           scopedSlots: { customRender: "actions" }
-        }
+        },
       ];
       return columns;
     }
@@ -250,7 +264,8 @@ export default {
               email: doc.data().email,
               phone: doc.data().phone,
               company: doc.data().company,
-              quality: doc.data().quality
+              quality: doc.data().quality,
+              workshop: doc.data().workshop,
             });
           });
           this.loading = false;

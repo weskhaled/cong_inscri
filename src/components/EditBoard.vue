@@ -53,7 +53,7 @@ export default {
     }
   },
   created () {
-    const ref = firebase.firestore().collection('boards').doc(this.$route.params.id);
+    const ref = firebase.collection('boards').doc(this.$route.params.id);
     ref.get().then((doc) => {
       if (doc.exists) {
         this.board = doc.data();
@@ -65,8 +65,8 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      const updateRef = firebase.firestore().collection('boards').doc(this.$route.params.id);
-      updateRef.set(this.board).then((docRef) => {
+      const updateRef = firebase.collection('boards').doc(this.$route.params.id);
+      updateRef.set(this.board).then(() => {
         this.key = ''
         this.board.title = ''
         this.board.description = ''

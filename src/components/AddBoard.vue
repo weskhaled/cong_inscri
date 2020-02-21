@@ -48,7 +48,7 @@ export default {
   name: 'AddBoard',
   data () {
     return {
-      ref: firebase.firestore().collection('boards'),
+      ref: firebase.collection('boards'),
       board: {}
     }
   },
@@ -56,7 +56,7 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
 
-      this.ref.add(this.board).then((docRef) => {
+      this.ref.add(this.board).then(() => {
         this.board.title = ''
         this.board.description = ''
         this.board.author = ''

@@ -1,14 +1,15 @@
-import firebase from 'firebase';
+import firebase from "firebase/app";
+import "firebase/firestore";
 
-const settings = {timestampsInSnapshots: true};
+const settings = {};
 
 const config = {
-  apiKey: "Your_Firebase_API_KEY",
-  databaseURL: "Your_Firebase_Database_URL",
-  projectId: "Your_Firebase_Project_ID"
+  apiKey: "AIzaSyD5UES7EZasdpJ_-stJ8GFWKthA2IlSi5M",
+  databaseURL: "https://getyourbadge-6ca0c.firebaseio.com/",
+  projectId: "getyourbadge-6ca0c"
 };
-firebase.initializeApp(config);
 
-firebase.firestore().settings(settings);
+const firebaseApp = firebase.initializeApp(config);
+firebaseApp.firestore().settings(settings);
 
-export default firebase;
+export default firebaseApp.firestore();

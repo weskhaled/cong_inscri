@@ -18,6 +18,7 @@
         <b-btn class="edit-btn" variant="success" @click.stop="editboard(key)">Edit</b-btn>
         <b-btn variant="danger" @click.stop="deleteboard(key)">Delete</b-btn>
       </b-jumbotron>
+      <QRCode :value="board"/>
     </b-col>
   </b-row>
 </template>
@@ -25,10 +26,14 @@
 <script>
 
 import firebase from '../Firebase'
+import QRCode from './QRCode'
 import router from '../router'
 
 export default {
   name: 'ShowBoard',
+  components: {
+    'QRCode': QRCode,
+  },
   data () {
     return {
       key: '',
@@ -36,7 +41,7 @@ export default {
     }
   },
   created () {
-    const ref = firebase.firestore().collection('boards').doc(this.$route.params.id);
+    const ref = firebase.collection('boards').doc(this.$route.params.id);
     ref.get().then((doc) => {
       if (doc.exists) {
         this.key = doc.id;
@@ -54,7 +59,7 @@ export default {
       })
     },
     deleteboard (id) {
-      firebase.firestore().collection('boards').doc(id).delete().then(() => {
+      firebase.collection('boards').doc(id).delete().then(() => {
         router.push({
           name: 'BoardList'
         })

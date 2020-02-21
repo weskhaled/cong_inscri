@@ -11,6 +11,7 @@
         </template>
       </b-table>
     </b-col>
+    <a-button type="primary">Primary</a-button>
   </b-row>
 </template>
 
@@ -29,7 +30,7 @@ export default {
       ],
       boards: [],
       errors: [],
-      ref: firebase.firestore().collection('boards'),
+      ref: firebase.collection('boards'),
     }
   },
   created () {

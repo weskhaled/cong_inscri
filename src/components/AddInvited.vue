@@ -163,6 +163,39 @@ const OPTIONS = [
     text:
       "Atelier 3: SMART CITY comme levier de développement de nouveaux services performants",
     value: 3
+  },
+  {
+    text:
+      "Atelier 4 : Convergence digitale du monde financier et des assurances",
+    value: 4
+  },
+  {
+    text:
+      "Atelier 5 : La transition numérique : opportunités pour la profession et gestion dématérialisée du cabinet",
+    value: 5
+  },
+  {
+    text:
+      "Atelier 6 : Stratégie du gouvernement en matière de transition numérique et digitalisation de l’administration publique",
+    value: 6
+  },
+  {
+    text: "Atelier 7 : les incubateurs de performances digitales",
+    value: 7
+  },
+  {
+    text: "Atelier 8 : Industrie 4.0 : quels enjeux pour la Tunisie",
+    value: 8
+  },
+  {
+    text:
+      "Atelier 9 (Profession comptable): l’IFAC : activités et apport pour la profession - Le télé-traitement et les prix de transfert",
+    value: 9
+  },
+  {
+    text:
+      "Atelier 10 (convergence télécom): Apport de Tunisie Télécom en matière de digitalisation: la nouvelle offre de service TT",
+    value: 10
   }
 ];
 export default {

@@ -5,7 +5,7 @@ import router from './router'
 // import BootstrapVue from 'bootstrap-vue'
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
-import { Row, Col, Card, Table, Tabs, Button, Form, Input, Icon, Select, Tag, message } from 'ant-design-vue';
+import { Row, Col, Card, Table, Tabs, Button, Form, Input, Icon, Select, Tag, Tooltip, message, Spin } from 'ant-design-vue';
 
 Vue.component(Table.name, Table)
 Vue.component(Table.Column.name, Table.Column)
@@ -27,7 +27,9 @@ Vue.component(Input.name, Input)
 Vue.component(Icon.name, Icon)
 Vue.component(Input.Search.name, Input.Search)
 Vue.component(Tag.name, Tag)
+Vue.component(Tooltip.name, Tooltip)
 Vue.component(Tag.CheckableTag.name, Tag.CheckableTag)
+Vue.component(Spin.name, Spin)
 Vue.prototype.$message = message
 
 Vue.config.productionTip = false

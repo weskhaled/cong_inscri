@@ -20,10 +20,7 @@
         <div class="card--wrp">
           <a-card hoverable>
             <img alt="example" src="../assets/badge.jpg" slot="cover" />
-            <h1
-              class="text-capitalize"
-              v-html="`${gender} ${invited.firstname}`"
-            ></h1>
+            <h1 class="text-capitalize" v-html="`${gender} ${invited.firstname}`"></h1>
             <h2 v-html="`${invited.company}`"></h2>
             <div class="card--qr-code">
               <QRCode :value="invited" />
@@ -89,9 +86,9 @@ export default {
   height: 100vh;
 }
 .card--wrp .ant-card {
-  width: 400px;
+  width: 340px;
   margin: auto;
-  height: 585px;
+  height: 530px;
   position: relative;
 }
 .card--qr-code {
@@ -101,7 +98,7 @@ export default {
   right: 15px;
 }
 .card--wrp .ant-card-cover {
-  height: 340px;
+  height: 290px;
 }
 .card--wrp .ant-card-cover img {
   height: 100%;

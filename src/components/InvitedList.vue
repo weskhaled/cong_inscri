@@ -12,6 +12,7 @@
             :columns="columns"
             :loading="loading"
             :pagination="pagination"
+            :scroll="{ x: 1500 }"
             @change="handleTableChange"
             ref="invitedTable"
           >
@@ -78,16 +79,21 @@
               <template v-else>{{text}}</template>
             </template>
             <template slot="tags" slot-scope="workshop">
-              <a-tag
-                v-for="tag in workshop"
-                :color="'green'"
-                :key="tag"
-              >
-                {{tag}}
-              </a-tag>
+              <a-tag v-for="tag in workshop" :color="'green'" :key="tag">{{tag}}</a-tag>
             </template>
             <template slot="actions" slot-scope="text, record">
-              <a-button type="primary" shape="circle" icon="printer" @click="details(record)"></a-button>
+              <a-tooltip placement="topRight" :title="`Imprimer un badge`">
+                <a-button
+                  style="margin-right: 5px;"
+                  type="primary"
+                  shape="circle"
+                  icon="printer"
+                  @click="details(record)"
+                ></a-button>
+              </a-tooltip>
+              <a-tooltip placement="topRight" :title="`Modifier l'invité ${record.firstname}`">
+                <a-button type="primary" shape="circle" icon="edit" @click="editInvited(record)"></a-button>
+              </a-tooltip>
             </template>
           </a-table>
         </a-col>
@@ -127,6 +133,8 @@ export default {
           title: "Name",
           dataIndex: "firstname",
           key: "firstname",
+          fixed: "left",
+          width: 200,
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
@@ -152,6 +160,8 @@ export default {
           title: "Phone",
           dataIndex: "phone",
           key: "phone",
+          fixed: "left",
+          width: 150,
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
@@ -209,13 +219,16 @@ export default {
         {
           title: "Atelier",
           dataIndex: "workshop",
-          scopedSlots: { customRender: "tags" }
+          scopedSlots: { customRender: "tags" },
+          width: 320
         },
         {
           title: "Actions",
           dataIndex: "key",
-          scopedSlots: { customRender: "actions" }
-        },
+          scopedSlots: { customRender: "actions" },
+          fixed: "right",
+          width: 120
+        }
       ];
       return columns;
     }
@@ -265,7 +278,7 @@ export default {
               phone: doc.data().phone,
               company: doc.data().company,
               quality: doc.data().quality,
-              workshop: doc.data().workshop,
+              workshop: doc.data().workshop
             });
           });
           this.loading = false;
@@ -274,6 +287,9 @@ export default {
     },
     addInvited() {
       router.push({ name: "AddInvited" });
+    },
+    editInvited(invited) {
+      router.push({ name: "EditInvited", params: { id: invited.key } });
     },
     details(invited) {
       router.push({ name: "ShowInvited", params: { id: invited.key } });

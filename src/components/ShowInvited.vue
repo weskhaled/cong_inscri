@@ -20,7 +20,7 @@
         <div class="card--wrp">
           <a-card hoverable>
             <img alt="example" src="../assets/badge.jpg" slot="cover" />
-            <h1 v-html="`Mr: ${invited.lastname} ${invited.firstname}`"></h1>
+            <h1 class="text-capitalize" v-html="`${invited.gender === 'mrs' ? 'Mme' : 'M'}: ${invited.lastname} ${invited.firstname}`"></h1>
             <h2 v-html="`${invited.company}`"></h2>
             <div class="card--qr-code">
               <QRCode :value="invited" />
@@ -102,7 +102,11 @@ export default {
 .card--wrp .ant-card-body h2 {
   color: rgb(58, 58, 58);
   text-transform: capitalize;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  margin-right: 120px;
+}
+.text-capitalize {
+  text-transform: capitalize;
 }
 @media print {
   .header {

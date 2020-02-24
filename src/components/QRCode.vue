@@ -25,7 +25,7 @@ export default {
     qrCode: function () {
       return new QRious({
         value: JSON.stringify(this.value),
-        size: 150}).toDataURL();
+        size: 135}).toDataURL();
     }
   },
   methods: {

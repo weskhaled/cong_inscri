@@ -21,7 +21,30 @@
             style="margin-bottom:0;"
             required
           >
-            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(20% - 16px)' }">
+              <a-select
+                style="width: 100%"
+                v-decorator="[
+                'gender',
+                {
+                  rules: [
+                    { required: true, message: 'Please select gender!' }
+                  ],
+                  initialValue: 'mr'
+                }
+              ]"
+                placeholder="Gender"
+                @change="handleChange"
+              >
+                <a-select-option
+                  v-for="item in gender"
+                  :key="item.value"
+                  :value="item.value"
+                >{{item.text}}</a-select-option>
+              </a-select>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '20px', textAlign: 'center' }">/</span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(40% - 12px)' }">
               <a-input
                 style="width: 100%"
                 v-decorator="[
@@ -34,8 +57,8 @@
               ]"
               />
             </a-form-item>
-            <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }">/</span>
-            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <span :style="{ display: 'inline-block', width: '20px', textAlign: 'center' }">/</span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(40% - 12px)' }">
               <a-input
                 style="width: 100%"
                 v-decorator="[
@@ -204,6 +227,16 @@ export default {
     return {
       ref: firebase.collection("inviteds"),
       selectedItems: [],
+      gender: [
+        {
+          text: "M",
+          value: "mr"
+        },
+        {
+          text: "Mme",
+          value: "mrs"
+        }
+      ],
       form: this.$form.createForm(this),
       loading: false
     };

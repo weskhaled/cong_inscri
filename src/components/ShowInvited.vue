@@ -20,7 +20,10 @@
         <div class="card--wrp">
           <a-card hoverable>
             <img alt="example" src="../assets/badge.jpg" slot="cover" />
-            <h1 class="text-capitalize" v-html="`${invited.gender === 'mrs' ? 'Mme' : 'M'}: ${invited.lastname} ${invited.firstname}`"></h1>
+            <h1
+              class="text-capitalize"
+              v-html="`${gender} ${invited.firstname}`"
+            ></h1>
             <h2 v-html="`${invited.company}`"></h2>
             <div class="card--qr-code">
               <QRCode :value="invited" />
@@ -49,6 +52,13 @@ export default {
       invited: {}
     };
   },
+  computed: {
+    gender() {
+      if (this.invited?.gender === "mrs") return "Mme";
+      if (this.invited?.gender === "ms") return "Mlle";
+      return "M.";
+    }
+  },
   created() {
     const ref = this.ref.doc(this.$route.params.id);
     ref.get().then(doc => {
@@ -57,6 +67,7 @@ export default {
         this.invited = doc.data();
       } else {
         this.$message.error(`No such document!`, 2.5);
+        this.goToHome();
       }
     });
   },

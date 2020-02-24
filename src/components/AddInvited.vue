@@ -229,12 +229,16 @@ export default {
       selectedItems: [],
       gender: [
         {
-          text: "M",
+          text: "M.",
           value: "mr"
         },
         {
           text: "Mme",
           value: "mrs"
+        },
+        {
+          text: "Mlle",
+          value: "ms"
         }
       ],
       form: this.$form.createForm(this),

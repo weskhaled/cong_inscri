@@ -86,9 +86,9 @@ export default {
   height: 100vh;
 }
 .card--wrp .ant-card {
-  width: 340px;
+  width: 360px;
   margin: auto;
-  height: 530px;
+  height: 500px;
   position: relative;
 }
 .card--qr-code {
@@ -96,6 +96,7 @@ export default {
   position: absolute;
   bottom: 15px;
   right: 15px;
+  width: 100px;
 }
 .card--wrp .ant-card-cover {
   height: 290px;
@@ -111,7 +112,7 @@ export default {
   color: rgb(58, 58, 58);
   text-transform: capitalize;
   font-size: 1.3rem;
-  margin-right: 120px;
+  margin-right: 100px;
 }
 .text-capitalize {
   text-transform: capitalize;

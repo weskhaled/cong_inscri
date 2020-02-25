@@ -4,6 +4,7 @@
       <span slot="extra">
         <a-button type="primary" icon="user-add" @click="() => addInvited()">Ajouter un invités</a-button>
         <a-button icon="sync" @click="() => fetch()" :loading="loading">Refresh Data</a-button>
+        <a-button icon="printer" @click="printAll()">Print All</a-button>
       </span>
       <a-row>
         <a-col :span="24">
@@ -293,6 +294,9 @@ export default {
     },
     details(invited) {
       router.push({ name: "ShowInvited", params: { id: invited.key } });
+    },
+    printAll() {
+      router.push({ name: "PrintInviteds" });
     }
   }
 };

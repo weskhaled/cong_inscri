@@ -4,6 +4,7 @@ import AddInvited from "@/components/AddInvited";
 import EditInvited from "@/components/EditInvited";
 import InvitedList from "@/components/InvitedList";
 import ShowInvited from "@/components/ShowInvited";
+import PrintInviteds from "@/components/PrintInviteds";
 
 export default new VueRouter({
   mode: "history",
@@ -27,6 +28,11 @@ export default new VueRouter({
       path: "/show-invited/:id",
       name: "ShowInvited",
       component: ShowInvited
+    },
+    {
+      path: "/print-all-inviteds",
+      name: "PrintInviteds",
+      component: PrintInviteds
     }
   ]
 });

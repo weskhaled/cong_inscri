@@ -1,7 +1,5 @@
 <template>
-  <span>
-    <img :src="qrCode">
-  </span>
+  <img :src="qrCode" width="100%" height="100%">
 </template>
 
 <script>
@@ -25,7 +23,7 @@ export default {
     qrCode: function () {
       return new QRious({
         value: JSON.stringify(this.value),
-        size: 135}).toDataURL();
+        size: 200}).toDataURL();
     }
   },
   methods: {

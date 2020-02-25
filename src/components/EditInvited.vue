@@ -245,7 +245,7 @@ export default {
         }
       ],
       form: this.$form.createForm(this),
-      spinning: true,
+      spinning: true
     };
   },
   computed: {

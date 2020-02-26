@@ -2,8 +2,8 @@
   <div class="list-invited">
     <a-card title="List des invités" :bodyStyle="{'padding': 0}">
       <span slot="extra">
-        <input id="upload" type="file" v-on:change="beforeUpload($event)" />
         <a-button type="primary" icon="user-add" @click="() => addInvited()">Ajouter un invités</a-button>
+        <a-button icon="sync" @click="() => fetch()" :loading="loading">Refresh Data</a-button>
         <a-button icon="printer" @click="printAll()">Print All</a-button>
       </span>
       <a-row>
@@ -103,18 +103,18 @@
   </div>
 </template>
 <script>
+import firebase from "../Firebase";
 import router from "../router";
-import XLSX from "xlsx";
 
 export default {
   name: "InvitedList",
   data() {
     return {
+      ref: firebase.collection("inviteds"),
       data: [],
       pagination: {
         defaultPageSize: 15
       },
-      workbook: [],
       loading: false,
       filteredInfo: null,
       sortedInfo: null,
@@ -265,65 +265,35 @@ export default {
       this.clearAll();
       this.data = [];
       this.loading = true;
-      if (JSON.parse(localStorage.getItem("data"))) {
-        this.data = JSON.parse(localStorage.getItem("data"));
-        this.loading = false;
-      }
-    },
-    beforeUpload(event) {
-      this.data = [];
-      let file = event.target.files[0];
-      let reader = new FileReader();
-      let self = this;
-      reader.onload = function(event) {
-        let data = event.target.result;
-        let workbook = XLSX.read(data, {
-          type: "binary"
-        });
-
-        let XL_row_object = XLSX.utils.sheet_to_row_object_array(
-          workbook.Sheets["Feuil1"]
-        );
-
-        XL_row_object.shift();
-        XL_row_object.filter(inv => inv.__EMPTY_5).map((ele, i) => {
-          self.data.push({
-            key: i,
-            firstname: ele.__EMPTY_1,
-            lastname: ele.__EMPTY_2,
-            email: ele.__EMPTY_6,
-            phone: ele.__EMPTY_5,
-            company: ele.__EMPTY_3,
-            quality: ele.__EMPTY_4,
-            workshop: ele.__EMPTY_7
-              ? ele.__EMPTY_7
-                  .replace(/\s\s+/g, " ")
-                  .split("Atelier")
-                  .filter(Number)
-                  .map(Number)
-              : []
+      this.ref
+        .orderBy("firstname")
+        .get()
+        .then(snap => {
+          const pagination = { ...this.pagination };
+          snap.docs.forEach(doc => {
+            this.data.push({
+              key: doc.id,
+              firstname: doc.data().firstname,
+              lastname: doc.data().lastname,
+              email: doc.data().email,
+              phone: doc.data().phone,
+              company: doc.data().company,
+              quality: doc.data().quality,
+              workshop: doc.data().workshop
+            });
           });
+          this.loading = false;
+          this.pagination = pagination;
         });
-        localStorage.setItem("data", JSON.stringify(self.data));
-        self.loading = false;
-      };
-
-      reader.onerror = function(ex) {
-        console.log(ex);
-      };
-
-      reader.readAsBinaryString(file);
-
-      return false;
     },
     addInvited() {
       router.push({ name: "AddInvited" });
     },
     editInvited(invited) {
-      router.push({ name: "EditInvited", params: { id: invited } });
+      router.push({ name: "EditInvited", params: { id: invited.key } });
     },
     details(invited) {
-      router.push({ name: "ShowInvited", params: { id: invited } });
+      router.push({ name: "ShowInvited", params: { id: invited.key } });
     },
     printAll() {
       router.push({ name: "PrintInviteds" });

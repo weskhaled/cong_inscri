@@ -170,7 +170,6 @@
   </a-spin>
 </template>
 <script>
-import firebase from "../Firebase";
 import router from "../router";
 
 const OPTIONS = [
@@ -227,7 +226,6 @@ export default {
   name: "EditInvited",
   data() {
     return {
-      ref: firebase.collection("inviteds"),
       invited: {},
       selectedItems: [],
       gender: [
@@ -254,45 +252,36 @@ export default {
     }
   },
   created() {
-    const ref = this.ref.doc(this.$route.params.id);
-    ref.get().then(doc => {
-      if (doc.exists) {
-        this.key = doc.id;
-        this.invited = doc.data();
-        this.spinning = false;
-        this.form = this.$form.createForm(this, {
-          mapPropsToFields: () => {
-            return {
-              gender: this.$form.createFormField({
-                value: this.invited.gender || "mr"
-              }),
-              firstname: this.$form.createFormField({
-                value: this.invited.firstname
-              }),
-              lastname: this.$form.createFormField({
-                value: this.invited.lastname
-              }),
-              company: this.$form.createFormField({
-                value: this.invited.company
-              }),
-              phone: this.$form.createFormField({
-                value: this.invited.phone
-              }),
-              email: this.$form.createFormField({
-                value: this.invited.email
-              }),
-              quality: this.$form.createFormField({
-                value: this.invited.quality
-              }),
-              workshop: this.$form.createFormField({
-                value: this.invited.workshop
-              })
-            };
-          }
-        });
-      } else {
-        this.$message.error(`No such document!`, 2.5);
-        this.goToHome();
+    this.invited = this.$route.params.id;
+    this.spinning = false;
+    this.form = this.$form.createForm(this, {
+      mapPropsToFields: () => {
+        return {
+          gender: this.$form.createFormField({
+            value: this.invited.gender || "mr"
+          }),
+          firstname: this.$form.createFormField({
+            value: this.invited.firstname
+          }),
+          lastname: this.$form.createFormField({
+            value: this.invited.lastname
+          }),
+          company: this.$form.createFormField({
+            value: this.invited.company
+          }),
+          phone: this.$form.createFormField({
+            value: this.invited.phone + ''
+          }),
+          email: this.$form.createFormField({
+            value: this.invited.email
+          }),
+          quality: this.$form.createFormField({
+            value: this.invited.quality
+          }),
+          workshop: this.$form.createFormField({
+            value: this.invited.workshop
+          })
+        };
       }
     });
   },
@@ -304,21 +293,12 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          this.spinning = true;
-          this.$message.loading("Action in progress..", 0);
-          const updateRef = this.ref.doc(this.$route.params.id);
-          updateRef
-            .set(values)
-            .then(() => {
-              this.$message.destroy();
-              this.$message.success("Edit invités avec succès", 2);
-              this.spinning = false;
-              this.goToHome();
-            })
-            .catch(error => {
-              this.$message.error(`Error document: ${error}`, 2);
-              this.spinning = false;
-            });
+          this.loading = true;
+          this.$message.loading("Action in progress..", 1);
+          router.push({
+            name: "ShowInvited",
+            params: { id: Object.assign({}, values) }
+          });
         }
       });
     },

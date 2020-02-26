@@ -20,7 +20,7 @@
         <div class="card--wrp">
           <a-card hoverable>
             <img alt="example" src="../assets/badge.jpg" slot="cover" />
-            <h1 class="text-capitalize" v-html="`${gender} ${invited.firstname}`"></h1>
+            <h1 class="text-capitalize" v-html="`${invited.firstname} ${invited.lastname}`"></h1>
             <h2 v-html="`${invited.company}`"></h2>
             <div class="card--qr-code">
               <QRCode :value="invited" />
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import firebase from "../Firebase";
 import QRCode from "./QRCode";
 import router from "../router";
 
@@ -44,7 +43,6 @@ export default {
   },
   data() {
     return {
-      ref: firebase.collection("inviteds"),
       key: "",
       invited: {}
     };
@@ -57,16 +55,7 @@ export default {
     }
   },
   created() {
-    const ref = this.ref.doc(this.$route.params.id);
-    ref.get().then(doc => {
-      if (doc.exists) {
-        this.key = doc.id;
-        this.invited = doc.data();
-      } else {
-        this.$message.error(`No such document!`, 2.5);
-        this.goToHome();
-      }
-    });
+    this.invited = this.$route.params.id;
   },
   methods: {
     goToHome() {
@@ -86,9 +75,9 @@ export default {
   height: 100vh;
 }
 .card--wrp .ant-card {
-  width: 360px;
+  width: 400px;
   margin: auto;
-  height: 500px;
+  height: 570px;
   position: relative;
 }
 .card--qr-code {
@@ -96,11 +85,9 @@ export default {
   position: absolute;
   bottom: 15px;
   right: 15px;
-  width: 100px;
+  width: 120px;
 }
-.card--wrp .ant-card-cover {
-  height: 290px;
-}
+
 .card--wrp .ant-card-cover img {
   height: 100%;
 }

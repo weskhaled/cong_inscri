@@ -21,30 +21,7 @@
             style="margin-bottom:0;"
             required
           >
-            <a-form-item :style="{ display: 'inline-block', width: 'calc(20% - 16px)' }">
-              <a-select
-                style="width: 100%"
-                v-decorator="[
-                'gender',
-                {
-                  rules: [
-                    { required: true, message: 'Please select gender!' }
-                  ],
-                  initialValue: 'mr'
-                }
-              ]"
-                placeholder="Gender"
-                @change="handleChange"
-              >
-                <a-select-option
-                  v-for="item in gender"
-                  :key="item.value"
-                  :value="item.value"
-                >{{item.text}}</a-select-option>
-              </a-select>
-            </a-form-item>
-            <span :style="{ display: 'inline-block', width: '20px', textAlign: 'center' }">/</span>
-            <a-form-item :style="{ display: 'inline-block', width: 'calc(40% - 12px)' }">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
               <a-input
                 style="width: 100%"
                 v-decorator="[
@@ -58,7 +35,7 @@
               />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '20px', textAlign: 'center' }">/</span>
-            <a-form-item :style="{ display: 'inline-block', width: 'calc(40% - 12px)' }">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
               <a-input
                 style="width: 100%"
                 v-decorator="[
@@ -168,7 +145,6 @@
   </div>
 </template>
 <script>
-import firebase from "../Firebase";
 import router from "../router";
 
 const OPTIONS = [
@@ -225,7 +201,6 @@ export default {
   name: "AddInvited",
   data() {
     return {
-      ref: firebase.collection("inviteds"),
       selectedItems: [],
       gender: [
         {
@@ -259,38 +234,8 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true;
-          this.$message.loading("Action in progress..", 0);
-          this.ref
-            .where("phone", "==", values.phone)
-            .get()
-            .then(snapshot => {
-              if (snapshot.empty) {
-                this.ref
-                  .add(values)
-                  .then(() => {
-                    this.$message.destroy();
-                    this.$message.success("Ajouter un invités avec succès", 2);
-                    this.loading = false;
-                    this.goToHome();
-                  })
-                  .catch(error => {
-                    this.$message.error(`Error adding document: ${error}`, 2);
-                    this.loading = false;
-                  });
-                return;
-              }
-
-              snapshot.forEach(doc => {
-                this.$message.destroy();
-                this.$message.success(
-                  `${doc.data().firstname}, déjà inscrit`,
-                  3
-                );
-              });
-            })
-            .catch(err => {
-              this.$message.error(`Error checking documents: ${err}`, 2);
-            });
+          this.$message.loading("Action in progress..", 1);
+          router.push({ name: "ShowInvited", params: { id: Object.assign({}, values) } });
         }
       });
     },

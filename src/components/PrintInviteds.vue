@@ -11,6 +11,7 @@
       </a-col>
       <a-col :span="8">
         <div class="text-center">
+          <input id="upload" type="file" v-on:change="beforeUpload($event)" />
           <a-button type="primary" icon="printer" @click="() => print()">Print</a-button>
         </div>
       </a-col>
@@ -22,7 +23,7 @@
             <div class="print-card--wrp">
               <a-card hoverable>
                 <img alt="example" src="../assets/badge.jpg" slot="cover" />
-                <h1 class="text-capitalize">{{invited.gender | gender}} {{invited.firstname}}</h1>
+                <h1 class="text-capitalize">{{invited.firstname}} {{invited.lastname}}</h1>
                 <h2 v-html="`${invited.company}`"></h2>
                 <div class="card--qr-code">
                   <QRCode :value="invited" />
@@ -36,8 +37,8 @@
   </div>
 </template>
 <script>
-import firebase from "../Firebase";
 import router from "../router";
+import XLSX from "xlsx";
 
 import QRCode from "./QRCode";
 
@@ -48,7 +49,6 @@ export default {
   },
   data() {
     return {
-      ref: firebase.collection("inviteds"),
       data: [],
       loading: true
     };
@@ -174,27 +174,56 @@ export default {
     fetch() {
       this.data = [];
       this.loading = true;
-      this.ref
-        .orderBy("firstname")
-        .get()
-        .then(snap => {
-          const pagination = { ...this.pagination };
-          snap.docs.forEach(doc => {
-            this.data.push({
-              key: doc.id,
-              firstname: doc.data().firstname,
-              lastname: doc.data().lastname,
-              email: doc.data().email,
-              phone: doc.data().phone,
-              gender: doc.data().gender || 'mr',
-              company: doc.data().company,
-              quality: doc.data().quality,
-              workshop: doc.data().workshop
-            });
-          });
-          this.loading = false;
-          this.pagination = pagination;
+      if (JSON.parse(localStorage.getItem("data"))) {
+        this.data = JSON.parse(localStorage.getItem("data"));
+        this.loading = false;
+      }
+    },
+    beforeUpload(event) {
+      console.log(event);
+      let file = event.target.files[0];
+      let reader = new FileReader();
+      let self = this;
+      reader.onload = function(event) {
+        let data = event.target.result;
+        let workbook = XLSX.read(data, {
+          type: "binary"
         });
+
+        // Here is your object
+        let XL_row_object = XLSX.utils.sheet_to_row_object_array(
+          workbook.Sheets["Feuil1"]
+        );
+        XL_row_object.shift();
+        XL_row_object.filter(inv => inv.__EMPTY_5).map((ele, i) => {
+          self.data.push({
+            key: i,
+            firstname: ele.__EMPTY_1,
+            lastname: ele.__EMPTY_2,
+            email: ele.__EMPTY_6,
+            phone: ele.__EMPTY_5,
+            company: ele.__EMPTY_3,
+            quality: ele.__EMPTY_4,
+            workshop: ele.__EMPTY_7
+              ? ele.__EMPTY_7
+                  .replace(/\s\s+/g, " ")
+                  .split("Atelier")
+                  .filter(Number)
+                  .map(Number)
+              : []
+          });
+        });
+        localStorage.setItem("data", JSON.stringify(self.data));
+        self.loading = false;
+      };
+
+      reader.onerror = function(ex) {
+        console.log(ex);
+      };
+
+      reader.readAsBinaryString(file);
+
+      return false;
     },
     editInvited(invited) {
       router.push({ name: "EditInvited", params: { id: invited.key } });
@@ -251,18 +280,18 @@ body {
 .print-card--wrp {
   display: flex;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.1rem;
 }
 .print-card--wrp .ant-card {
-  width: 360px;
+  width: 400px;
   margin: auto;
-  height: 500px;
+  height: 570px;
   position: relative;
 }
 .print-card--wrp .ant-card-body h2 {
   color: rgb(58, 58, 58);
   text-transform: capitalize;
-  font-size: 1.3rem;
+  font-size: 1rem;
   margin-right: 95px;
 }
 .card--qr-code {
@@ -270,7 +299,7 @@ body {
   position: absolute;
   bottom: 15px;
   right: 15px;
-  width: 100px;
+  width: 120px;
 }
 @media print {
   .page {
